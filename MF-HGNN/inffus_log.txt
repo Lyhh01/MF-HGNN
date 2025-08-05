@@ -1,0 +1,169 @@
+
+========================== Fold 0 ==========================
+
+========================== Fold 0 ==========================
+fc_hgnn(
+  (individual_graph_model): Brain_connectomic_graph(
+    (graph_convolution_l_1): GCNConv(111, 64)
+    (graph_convolution_r_1): GCNConv(111, 64)
+    (graph_convolution_l_2): GCNConv(64, 20)
+    (graph_convolution_r_2): GCNConv(64, 20)
+    (graph_convolution_g_1): GCNConv(20, 20)
+    (pooling_1): SAGPooling(GraphConv, 20, ratio=0.9, multiplier=1.0)
+    (socre_gcn): ChebConv(111, 9, K=3, normalization=sym)
+    (pooling_2): TopKPooling(20, ratio=0.9, multiplier=1.0)
+    (bns): BatchNorm1d(20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (transformer_convs1): TransformerConv(111, 64, heads=1)
+    (transformer_convs2): TransformerConv(64, 20, heads=1)
+    (transformer_convs3): TransformerConv(20, 20, heads=1)
+    (topkpool): TopKPooling(111, ratio=0.7, multiplier=1.0)
+    (socre_gcn2): ChebConv(111, 78, K=3, normalization=sym)
+    (graphnn_left): Sequential(
+      (0): Linear(in_features=111, out_features=7, bias=False)
+      (1): ReLU()
+      (2): Linear(in_features=7, out_features=2220, bias=True)
+    )
+    (myginconv_left): MyGINConvWithMean(111, 20, epsilon=0.0000)
+    (graphnn_right): Sequential(
+      (0): Linear(in_features=111, out_features=7, bias=False)
+      (1): ReLU()
+      (2): Linear(in_features=7, out_features=2220, bias=True)
+    )
+    (myginconv_right): MyGINConvWithMean(111, 20, epsilon=0.0000)
+    (graphnn_whole_brain_time): Sequential(
+      (0): Linear(in_features=111, out_features=7, bias=False)
+      (1): ReLU()
+      (2): Linear(in_features=7, out_features=2220, bias=True)
+    )
+    (myginconv_whole_brain_time): MyGINConvWithMean(111, 20, epsilon=0.0000)
+    (graphnn_whole_brain_space): Sequential(
+      (0): Linear(in_features=111, out_features=7, bias=False)
+      (1): ReLU()
+      (2): Linear(in_features=7, out_features=2220, bias=True)
+    )
+    (myginconv_whole_brain_space): MyGINConvWithMean(111, 20, epsilon=0.0000)
+    (graphnn_all): Sequential(
+      (0): Linear(in_features=111, out_features=7, bias=False)
+      (1): ReLU()
+      (2): Linear(in_features=7, out_features=1280, bias=True)
+    )
+    (myginconv_all): MyGINConvWithMean(64, 20, epsilon=0.0000)
+    (graphnn_all2): Sequential(
+      (0): Linear(in_features=111, out_features=7, bias=False)
+      (1): ReLU()
+      (2): Linear(in_features=7, out_features=400, bias=True)
+    )
+    (myginconv_all2): MyGINConvWithMean(20, 20, epsilon=0.0000)
+    (graphnn_all3): Sequential(
+      (0): Linear(in_features=111, out_features=7, bias=False)
+      (1): ReLU()
+      (2): Linear(in_features=7, out_features=400, bias=True)
+    )
+    (myginconv_all3): MyGINConvWithMean(20, 20, epsilon=0.0000)
+    (conv_whole_brain_k): Linear(in_features=40, out_features=40, bias=False)
+    (conv_whole_brain_q): Linear(in_features=40, out_features=40, bias=False)
+    (conv_whole_brain_v): Linear(in_features=40, out_features=40, bias=False)
+    (conv_whole_brain_logit_k): Linear(in_features=24, out_features=24, bias=False)
+    (conv_whole_brain_logit_q): Linear(in_features=40, out_features=24, bias=False)
+    (conv_whole_brain_logit_v): Linear(in_features=40, out_features=40, bias=False)
+    (conv_whole_brain_logit_k2): Linear(in_features=40, out_features=24, bias=False)
+    (conv_whole_brain_logit_q2): Linear(in_features=24, out_features=24, bias=False)
+    (conv_whole_brain_logit_v2): Linear(in_features=24, out_features=24, bias=False)
+    (STAGIN): ModelSTAGIN(
+      (initial_linear): Linear(in_features=111, out_features=20, bias=True)
+      (gnn_layers): ModuleList(
+        (0): LayerGIN(
+          (mlp): Sequential(
+            (0): Linear(in_features=20, out_features=20, bias=True)
+            (1): BatchNorm1d(20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (2): ReLU()
+            (3): Linear(in_features=20, out_features=20, bias=True)
+            (4): BatchNorm1d(20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (5): ReLU()
+          )
+        )
+      )
+      (readout_modules): ModuleList(
+        (0): ModuleSERO(
+          (embed): Sequential(
+            (0): Linear(in_features=20, out_features=20, bias=True)
+            (1): BatchNorm1d(20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (2): GELU(approximate='none')
+          )
+          (attend): Linear(in_features=20, out_features=111, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+      )
+      (transformer_modules): ModuleList(
+        (0): ModuleTransformer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=111, out_features=111, bias=True)
+          )
+          (layer_norm1): LayerNorm((111,), eps=1e-05, elementwise_affine=True)
+          (layer_norm2): LayerNorm((111,), eps=1e-05, elementwise_affine=True)
+          (dropout1): Dropout(p=0.1, inplace=False)
+          (dropout2): Dropout(p=0.1, inplace=False)
+          (mlp): Sequential(
+            (0): Linear(in_features=111, out_features=40, bias=True)
+            (1): ReLU()
+            (2): Dropout(p=0.1, inplace=False)
+            (3): Linear(in_features=40, out_features=111, bias=True)
+          )
+        )
+      )
+      (linear_layers): ModuleList(
+        (0): Linear(in_features=20, out_features=2, bias=True)
+      )
+      (dropout): Dropout(p=0.5, inplace=False)
+    )
+    (mha): MultiHeadAttention(
+      (qkv_proj): Linear(in_features=2220, out_features=6660, bias=True)
+      (out_proj): Linear(in_features=2220, out_features=2220, bias=True)
+    )
+    (walk_score): Linear(in_features=20, out_features=1, bias=True)
+  )
+  (population_graph_model): HPG(
+    (convs1): ModuleList(
+      (0): TransformerConv(2000, 20, heads=1)
+      (1-4): 4 x TransformerConv(40, 20, heads=1)
+    )
+    (convs2): ModuleList(
+      (0): TransformerConv(2000, 20, heads=1)
+      (1-4): 4 x TransformerConv(40, 20, heads=1)
+    )
+    (convs3): ModuleList(
+      (0): TransformerConv(2000, 20, heads=1)
+      (1-4): 4 x TransformerConv(40, 20, heads=1)
+    )
+    (convs4): ModuleList(
+      (0): TransformerConv(2000, 20, heads=1)
+      (1-4): 4 x TransformerConv(40, 20, heads=1)
+    )
+    (bns): ModuleList(
+      (0-4): 5 x BatchNorm1d(20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (bns2): ModuleList(
+      (0-4): 5 x BatchNorm1d(20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (bns3): ModuleList(
+      (0-4): 5 x BatchNorm1d(20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (out_fc): Linear(in_features=100, out_features=2, bias=True)
+    (conv5): Linear(in_features=20, out_features=1, bias=False)
+    (conv6): Linear(in_features=20, out_features=1, bias=False)
+    (conv7): Linear(in_features=20, out_features=1, bias=False)
+    (conv8): Linear(in_features=20, out_features=1, bias=False)
+    (conv9): Linear(in_features=20, out_features=1, bias=False)
+    (conv10): Linear(in_features=20, out_features=1, bias=False)
+    (conv11): Linear(in_features=20, out_features=1, bias=False)
+    (conv12): Linear(in_features=20, out_features=1, bias=False)
+    (conv13): TransformerConv(40, 20, heads=1)
+    (conv14): TransformerConv(40, 20, heads=1)
+    (conv15): TransformerConv(40, 20, heads=1)
+    (conv16): TransformerConv(40, 20, heads=1)
+    (conv17): TransformerConv(40, 20, heads=1)
+  )
+)
+Epoch: 0,	ce loss: 0.73868,	ce loss_cla: 0.73868,	train acc: 0.47126,	test acc: 0.53409,	test spe: 0.00000,	test sen: 1.00000      2025-06-01 17:33:17
+✔ Saved model to:./inffus_fold0.pth
+Epoch: 1,	ce loss: 0.73944,	ce loss_cla: 0.73944,	train acc: 0.56066,	test acc: 0.53409,	test spe: 0.00000,	test sen: 1.00000      2025-06-01 17:35:02
