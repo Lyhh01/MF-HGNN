@@ -6,8 +6,6 @@ import torch.nn.functional as F
 from torch import nn
 import torch
 from torch_geometric.nn import GCNConv
-from torch_geometric.utils.subgraph import subgraph
-from torch_geometric.nn.dense.diff_pool import dense_diff_pool
 from torch_geometric.nn import SAGPooling
 from torch_geometric.nn.pool.topk_pool import topk, filter_adj
 opt = OptInit().initialize()
@@ -118,50 +116,6 @@ class MyGINConvWithMean(MyMessagePassing):
             self.__class__.__name__, self.in_channels, self.out_channels, self.epsilon.item()
         )
 
-def kl_divergence(p, q):
-    non_zero_mask = (p > 0) & (q > 0)
-    return torch.sum(p[non_zero_mask] * torch.log(p[non_zero_mask] / q[non_zero_mask]))
-
-def select_top_k_windows(h_bridge, k):
-    """
-    选择与前一个窗口 KL 散度最大的 k 个窗口
-    :param h_bridge: 输入张量，形状为 (24, 111*20)
-    :param k: 要选择的窗口数量
-    :return: 选择的窗口索引
-    """
-    num_windows = h_bridge.shape[0]
-    kl_divergences = []
-    for i in range(1, num_windows):
-        p = torch.softmax(h_bridge[i - 1], dim=-1)
-        q = torch.softmax(h_bridge[i], dim=-1)
-        kl_div = kl_divergence(p, q)
-        kl_divergences.append(kl_div)
-
-    kl_divergences = torch.tensor(kl_divergences)
-    _, top_k_indices = torch.topk(kl_divergences, k)
-    # 由于是从第二个窗口开始计算的，所以要加 1 得到真实的索引
-    top_k_indices = top_k_indices + 1
-    return top_k_indices
-
-# 社区检测
-def community_detection(adj_matrix):
-    g = ig.Graph.Adjacency(adj_matrix.tolist())
-    partition = leidenalg.find_partition(g, leidenalg.ModularityVertexPartition)
-    return partition.membership
-
-def pearsonr_torch(x, y):
-    """
-    纯 PyTorch 实现的皮尔逊相关系数计算
-    """
-    x_mean = torch.mean(x, dim=1, keepdim=True)
-    y_mean = torch.mean(y, dim=1, keepdim=True)
-    xm = x - x_mean
-    ym = y - y_mean
-    r_num = torch.sum(xm * ym, dim=1)
-    r_den = torch.sqrt(torch.sum(xm ** 2, dim=1) * torch.sum(ym ** 2, dim=1))
-    r = r_num / r_den
-    return r
-
 def biased_random_walk(adj_matrix, node_scores, x, node_features_all3, perm, max_path_length=10):
     sorted_nodes = torch.argsort(node_scores, descending=True)
     sorted_nodes = sorted_nodes[torch.isin(sorted_nodes, perm)]
@@ -239,14 +193,6 @@ class Brain_connectomic_graph(torch.nn.Module):
         super(Brain_connectomic_graph, self).__init__()
         self._setup()
     def _setup(self):
-        self.graph_convolution_l_1 = GCNConv(111,64)
-        self.graph_convolution_r_1 = GCNConv(111,64)
-
-        self.graph_convolution_l_2 = GCNConv(64,20)
-        self.graph_convolution_r_2 = GCNConv(64,20)
-
-        self.graph_convolution_g_1 = GCNConv(20,20)
-
         self.pooling_1 = SAGPooling(20, 0.9)
         self.socre_gcn = ChebConv(111, 9, K=3, normalization='sym')
         self.pooling_2= TopKPooling(20, 0.9)
@@ -254,18 +200,6 @@ class Brain_connectomic_graph(torch.nn.Module):
         self.weight = nn.Parameter(torch.FloatTensor(64, 20)).to(opt.device)
         self.bns=nn.BatchNorm1d(20).to(opt.device)
         nn.init.xavier_normal_(self.weight)
-
-        self.transformer_convs1=(TransformerConv(in_channels=111, out_channels=64, heads=1))
-        self.transformer_convs2=(TransformerConv(in_channels=64, out_channels=20, heads=1))
-        self.transformer_convs3=(TransformerConv(in_channels=20, out_channels=20, heads=1))
-        self.topkpool = TopKPooling(in_channels=111, ratio=0.7)
-        self.socre_gcn2 = ChebConv(111, int(78), K=3, normalization='sym')
-
-        self.graphnn_left = nn.Sequential(nn.Linear(111, 7, bias=False), nn.ReLU(), nn.Linear(7, 20 * 111))
-        self.myginconv_left = MyGINConvWithMean(111, 20, self.graphnn_left, normalize=False)
-
-        self.graphnn_right = nn.Sequential(nn.Linear(111, 7, bias=False), nn.ReLU(), nn.Linear(7, 20 * 111))
-        self.myginconv_right = MyGINConvWithMean(111, 20, self.graphnn_right, normalize=False)
 
         self.graphnn_whole_brain_time = nn.Sequential(nn.Linear(111, 7, bias=False), nn.ReLU(), nn.Linear(7, 20 * 111))
         self.myginconv_whole_brain_time = MyGINConvWithMean(111, 20, self.graphnn_whole_brain_time, normalize=False)
@@ -294,7 +228,6 @@ class Brain_connectomic_graph(torch.nn.Module):
         self.conv_whole_brain_logit_q2 = nn.Linear(24, 24, bias=False)
         self.conv_whole_brain_logit_v2 = nn.Linear(24, 24, bias=False)
 
-
         self.STAGIN = ModelSTAGIN(
             input_dim=111,
             hidden_dim=20,
@@ -307,7 +240,7 @@ class Brain_connectomic_graph(torch.nn.Module):
             readout='sero')  # shared branch
 
         self.mha = MultiHeadAttention(2220, 1)
-        self.walk_score = torch.nn.Linear(20, 1)
+        self.whole_score = torch.nn.Linear(20, 1)
 
     def forward(self, data, time_serie, dynamic_fc):
         with np.errstate(divide='ignore', invalid='ignore'):
@@ -327,26 +260,7 @@ class Brain_connectomic_graph(torch.nn.Module):
         adj=adj.float()
         adj = adj.to(opt.device)
 
-        # --The graph convolutional neural network that integrates intrahemispheric and interhemispheric information (IIH-GCN) of the FC-HGNN.
-
-        # Left and right hemisphere index of fmri data in the ABIDE dataset based on the HO Brain Atlas.
-        leftBrain = torch.tensor([  6.,   5.,  55.,   1.,  98.,  71.,  73.,  77.,  63.,  96.,  79.,  15.,
-        104.,   4.,  25.,  23.,  41.,  43.,  45.,  17.,  61.,  65.,  59.,  57.,
-         86.,  21.,  35.,  37.,  39.,  94., 110.,   3.,  69.,  81.,  84., 100.,
-        102., 106.,  47.,  27.,  75.,   2.,  67.,  19.,  49.,  31.,  33., 108.,
-         51.,  53.,  88.,  90.,  92.,  29.,   0.])
-        rightBrain = torch.tensor([ 13.,  12.,  54.,   8.,  97.,  70.,  72.,  76.,  62.,  95.,  78.,  14.,
-        103.,  11.,  24.,  22.,  40.,  42.,  44.,  16.,  60.,  64.,  58.,  56.,
-         85.,  20.,  34.,  36.,  38.,  93., 109.,  10.,  68.,  80.,  83.,  99.,
-        101., 105.,  46.,  26.,  74.,   9.,  66.,  18.,  48.,  30.,  32., 107.,
-         50.,  52.,  87.,  89.,  91.,  28.,   7.])
-
-###########################################
-        # Get a subgraph of the left and right hemispheres of the brain.
-
         pos = torch.eye(features.shape[0])
-
-#############################################
 
         myfeatures = F.dropout(features, p=opt.dropout, training=self.training)
         node_features_whole_brain_space = torch.nn.functional.leaky_relu(self.myginconv_whole_brain_space(myfeatures, edges, edge_attr, pos))  # (111,20)
@@ -382,23 +296,19 @@ class Brain_connectomic_graph(torch.nn.Module):
 
         node_features_all = torch.cat((node_features_whole_brain_time_space, logit), -1)
 
-
-
         myfeatures = F.dropout(node_features_all, p=opt.dropout, training=self.training)
         node_features_all = torch.nn.functional.leaky_relu(self.myginconv_all(myfeatures, edges, edge_attr, pos))
-        #
+        
         myfeatures = F.dropout(node_features_all, p=opt.dropout, training=self.training)
         node_features_all2 = torch.nn.functional.leaky_relu(self.myginconv_all2(myfeatures, edges, edge_attr, pos))
 
         # node_features_all3 = torch.nn.functional.leaky_relu(self.myginconv_all3(node_features_all2, edges, edge_attr, pos))
         node_features_all3 = node_features_all2
 
-
         adj_matrix = torch.sparse_coo_tensor(edges, edge_attr, (111, 111))
-        x, edge_index, edge_attr_pooled, batch, perm, score = self.pooling_2(node_features_all3, edges, edge_attr)
-        node_scores = self.walk_score(node_features_all3).squeeze()
+        x, edge_index, edge_attr_pooled, batch, perm, score = self.pooling_1(node_features_all3, edges, edge_attr)
+        node_scores = self.whole_score(node_features_all3).squeeze()
         new_node_features = biased_random_walk(adj_matrix.to_dense(), node_scores, x, node_features_all3, perm,10)
-
 
         graph_embedding = new_node_features.view(1, -1)
 
@@ -461,31 +371,7 @@ class HPG(nn.Module):
         self.bns3.append(nn.BatchNorm1d(20))
         self.out_fc = nn.Linear(100, 2)
 
-        # Set initial weights to speed up the training process.
-        self.weights1 = torch.nn.Parameter(torch.empty(4).fill_(0.8))
-        self.weights2 = torch.nn.Parameter(torch.empty(4).fill_(0.2))
-        self.weights3 = torch.nn.Parameter(torch.empty(4).fill_(0.8))
-        self.weights4 = torch.nn.Parameter(torch.empty(4).fill_(0.2))
-
         self.a = torch.nn.Parameter(torch.Tensor(20, 1))
-
-        #####################################
-
-        self.conv5 = nn.Linear(20, 1, bias=False)
-        self.conv6 = nn.Linear(20, 1, bias=False)
-        self.z = nn.Parameter(torch.randn(1, 871))
-
-        self.conv7 = nn.Linear(20, 1, bias=False)
-        self.conv8 = nn.Linear(20, 1, bias=False)
-        self.z2 = nn.Parameter(torch.randn(1, 871))
-
-        self.conv9 = nn.Linear(20, 1, bias=False)
-        self.conv10 = nn.Linear(20, 1, bias=False)
-        self.z3 = nn.Parameter(torch.randn(1, 871))
-
-        self.conv11 = nn.Linear(20, 1, bias=False)
-        self.conv12 = nn.Linear(20, 1, bias=False)
-        self.z4 = nn.Parameter(torch.randn(1, 871))
 
         self.conv13 = TransformerConv(in_channels=40, out_channels=20, heads=1)
         self.conv14 = TransformerConv(in_channels=40, out_channels=20, heads=1)
