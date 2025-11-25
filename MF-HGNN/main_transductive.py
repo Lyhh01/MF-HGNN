@@ -3,7 +3,7 @@ import time
 from opt import *
 from metrics import accuracy, auc, prf, metrics
 from dataload import dataloader
-from model import fc_hgnn
+from model import mf_hgnn
 import os
 from dataload import LabelSmoothingLoss
 from dataload import Logger
@@ -53,7 +53,7 @@ if __name__ == '__main__':
             test_ind = test_index[fold]
             # The labels and model in this fold.
             labels = torch.tensor(y, dtype=torch.long).to(opt.device)
-            model = fc_hgnn(nonimg, phonetic_score).to(opt.device)
+            model = (nonimg, phonetic_score).to(opt.device)
             print(model)
 
             # The loss function in this fold.
