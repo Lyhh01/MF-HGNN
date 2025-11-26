@@ -485,10 +485,10 @@ class HPG(nn.Module):
 
         return x
 
-class fc_hgnn(torch.nn.Module):
+class mf_hgnn(torch.nn.Module):
 
     def __init__(self,nonimg, phonetic_score):
-        super(fc_hgnn, self).__init__()
+        super(mf_hgnn, self).__init__()
         self.nonimg = nonimg
         self.phonetic_score = phonetic_score
         self._setup()
