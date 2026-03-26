@@ -77,7 +77,7 @@ The public datasets used in the paper can be obtained from their official source
 └── README.md                     # Repository documentation
 ```
 
-## 📦 Model Checkpoints (Baidu Netdisk)
+## 📦 Model Checkpoints
 All pre-trained model weights (`ckpt_demo/`) are **not uploaded to GitHub** due to large file sizes. They can be downloaded from:
 
 **Link：MF-HGNN_Model_Checkpoints**
