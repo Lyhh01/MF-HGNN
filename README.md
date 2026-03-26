@@ -108,5 +108,5 @@ Standard 10-fold stratified cross-validation at the individual level. Uses Strat
 10-fold leave-group-out cross-validation stratified by the joint distribution of diagnosis and site (DX_GROUP + SITE_ID). Ensures balanced group composition to reduce data leakage and enable rigorous generalization evaluation.
 
 3. Leave-Group-Out (Site) Cross-Validation
-Strict leave-group-out cross-validation at the site level, designed to evaluate model generalization across different imaging centers. ABIDE: conducted on the three largest sites (NYU, UM, UCLA). MDD: each fold tests on one entire site and trains on all others.
+Strict leave-group-out cross-validation at the site level. This is a more rigorous validation strategy for evaluating model generalization across different imaging centers. ABIDE: conducted on the three largest sites (NYU, UM, UCLA). MDD: each fold tests on one entire site and trains on all others.
 
