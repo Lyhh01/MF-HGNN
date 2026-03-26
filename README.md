@@ -70,7 +70,7 @@ The public datasets used in the paper can be obtained from their official source
 
 ├── MF-HGNN/        # Best Model
 
-├── model/                        # Core model components
+├── model/                        # model components
 │   ├── brainmsgpassing.py
 │   ├── base_model.py
 │   └── metrics.py
