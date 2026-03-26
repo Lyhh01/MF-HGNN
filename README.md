@@ -1,7 +1,3 @@
-好的，我帮你把**Dataset Partitioning Descriptions**这一段格式统一成和前面完全一致的风格，整体 README 保持整洁规范，你指定保留的部分完全不动，只统一排版：
-
----
-
 # MF-HGNN: A Multi-View Fusion Heterogeneous Graph Neural Network for Psychiatric Disorder Diagnosis.
 
 This is an implementation of the FC-HGNN model as proposed in our paper. The code is available at https://github.com/Lyhh01/MF-HGNN.
