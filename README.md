@@ -104,3 +104,5 @@ The following cross-validation strategies are applied to both ABIDE and MDD data
   Strict leave-group-out cross-validation at the site level. This is a more rigorous validation strategy for evaluating model generalization across different imaging centers.
   - ABIDE: conducted on the three largest sites (NYU, UM, UCLA).
   - MDD: each fold tests on one entire site and trains on all others.
+ 
+  For detailed implementation, please refer to the corresponding dataload.py files in each experimental directory.
