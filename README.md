@@ -8,30 +8,17 @@ Accurate and efficient diagnosis of psychiatric disorders remains a significant 
 
 For more details about MF-HGNN, please refer to our paper.
 
----
-
 ## Instructions
+The public datasets used in the paper can be obtained from their official sources. Running `main.py` trains the model and makes predictions. `main_transductive.py` adds a validation set at run time. When training and testing your own data, it is recommended to try adjusting the relevant hyperparameters.
 
-The public datasets used in the paper can be obtained from their official sources.
+## Requirements:
+* torch
+* torch_geometric
+* scipy
+* numpy
+* os
 
-- Running `main.py` trains the model and makes predictions.
-- `main_transductive.py` adds a validation set at run time.
-- When training and testing on your own data, it is recommended to adjust the relevant hyperparameters.
-
----
-
-## Requirements
-
-- `torch`
-- `torch_geometric`
-- `scipy`
-- `numpy`
-- `os`
-
----
-
-## Repository Structure
-
+# Repository Structure
 ```
 ├── ABIDE/                        # ABIDE standard 10-fold cross-validation (individual level)
 │   ├── run.log                   # Complete training log
@@ -40,7 +27,7 @@ The public datasets used in the paper can be obtained from their official source
 │   ├── dataload.py               # Dataset loading and partitioning (core)
 │   ├── main.py                   # Training entry script
 │   └── model.py                  # Model structure
-│
+
 ├── ABIDE_LeaveGroupOut/          # ABIDE leave-group-out cross-validation
 │   ├── run.log
 │   ├── test.log
@@ -48,7 +35,7 @@ The public datasets used in the paper can be obtained from their official source
 │   ├── dataload.py               # Dataset loading and leave-group partitioning (core)
 │   ├── main.py
 │   └── model.py
-│
+
 ├── ABIDE_SiteLeaveGroupOut/      # ABIDE site-level leave-group-out cross-validation
 │   ├── run.log
 │   ├── test.log
@@ -56,7 +43,7 @@ The public datasets used in the paper can be obtained from their official source
 │   ├── dataload.py               # Dataset loading and site-level leave-group partitioning (core)
 │   ├── main.py
 │   └── model.py
-│
+
 ├── MDD/                          # MDD standard 10-fold cross-validation
 │   ├── run.log
 │   ├── test.log
@@ -64,7 +51,7 @@ The public datasets used in the paper can be obtained from their official source
 │   ├── dataload.py               # Dataset loading and partitioning (core)
 │   ├── main.py
 │   └── model.py
-│
+
 ├── MDD_LeaveGroupOut/            # MDD leave-group-out cross-validation
 │   ├── run.log
 │   ├── test.log
@@ -72,7 +59,7 @@ The public datasets used in the paper can be obtained from their official source
 │   ├── dataload.py               # Dataset loading and leave-group partitioning (core)
 │   ├── main.py
 │   └── model.py
-│
+
 ├── MDD_SiteLeaveGroupOut/        # MDD site-level leave-group-out cross-validation
 │   ├── run.log
 │   ├── test.log
@@ -80,40 +67,30 @@ The public datasets used in the paper can be obtained from their official source
 │   ├── dataload.py               # Dataset loading and site-level leave-group partitioning (core)
 │   ├── main.py
 │   └── model.py
-│
+
 ├── model/                        # Common core model code
 │   ├── brainmsgpassing.py
 │   ├── base_model.py
 │   └── metrics.py
-│
+
 └── README.md                     # Repository documentation
 ```
 
 ---
 
-## Model Checkpoints (Baidu Netdisk)
-
+## 📦 Model Checkpoints (Baidu Netdisk)
 All pre-trained model weights (`ckpt_demo/`) are **not uploaded to GitHub** due to large file sizes. They can be downloaded from:
 
-- **Link**: [MF-HGNN_Model_Checkpoints](https://pan.baidu.com/s/1qII63kUEUc2tQDKOi-JwnQ)
-- **Extraction Code**: `t7t9`
+**Link: MF-HGNN_Model_Checkpoints**
+https://pan.baidu.com/s/1qII63kUEUc2tQDKOi-JwnQ
+**Extraction Code: t7t9**
 
 After downloading, place the `ckpt_demo/` folder into the **corresponding experimental directory** to run the Jupyter demo.
 
 ---
 
-## Key Files Introduction
-
-| File | Description |
-|------|-------------|
-| `dataload.py` (in each folder) | Responsible for dataset loading and data partitioning, including 10-fold, leave-group-out, and site-level leave-group-out cross-validation. |
-| `run.log` / `test.log` | Complete training and testing records. |
-| `*_Demo.ipynb` | One-click reproduction demo for all experimental results. |
+## 📌 Key Files Introduction
+- **`dataload.py`** (in each folder): Responsible for **dataset loading and data partitioning** (including 10-fold, leave-group-out, and site-level leave-group-out cross-validation).
+- **`run.log` / `test.log`**: Complete training and testing records.
+- **`*_Demo.ipynb`**: One-click reproduction demo for all experimental results.
 ```
-
-主要整理内容：
-1. 将所有中文翻译为英文
-2. 统一了标题层级（使用 `---` 分隔主要章节）
-3. 将仓库结构改用清晰的树形图展示
-4. 将关键文件介绍改为表格形式，更简洁直观
-5. 统一了链接和代码块的格式
