@@ -17,3 +17,80 @@ The public datasets used in the paper can be obtained from their official source
 * scipy
 * numpy
 * os
+
+# Repository Structure
+```
+├── ABIDE/                        # ABIDE 标准10折交叉验证（个体水平）
+│   ├── run.log                   # 完整训练日志
+│   ├── test.log                  # 完整测试日志
+│   ├── ABIDE_Demo.ipynb          # 测试复现Demo
+│   ├── dataload.py               # 数据集加载与划分（核心）
+│   ├── main.py                   # 训练入口文件
+│   └── model.py                  # 模型结构
+
+├── ABIDE_LeaveGroupOut/          # ABIDE 留组外交叉验证
+│   ├── run.log
+│   ├── test.log
+│   ├── ABIDE_LeaveGroupOut_Demo.ipynb
+│   ├── dataload.py               # 数据集加载与留组划分（核心）
+│   ├── main.py
+│   └── model.py
+
+├── ABIDE_SiteLeaveGroupOut/      # ABIDE 按站点留组外交叉验证
+│   ├── run.log
+│   ├── test.log
+│   ├── ABIDE_SiteLeaveGroupOut_Demo.ipynb
+│   ├── dataload.py               # 数据集加载与站点留组划分（核心）
+│   ├── main.py
+│   └── model.py
+
+├── MDD/                          # MDD 标准10折交叉验证
+│   ├── run.log
+│   ├── test.log
+│   ├── MDD_Demo.ipynb
+│   ├── dataload.py               # 数据集加载与划分（核心）
+│   ├── main.py
+│   └── model.py
+
+├── MDD_LeaveGroupOut/            # MDD 留组外交叉验证
+│   ├── run.log
+│   ├── test.log
+│   ├── MDD_LeaveGroupOut_Demo.ipynb
+│   ├── dataload.py               # 数据集加载与留组划分（核心）
+│   ├── main.py
+│   └── model.py
+
+├── MDD_SiteLeaveGroupOut/        # MDD 按站点留组外交叉验证
+│   ├── run.log
+│   ├── test.log
+│   ├── MDD_SiteLeaveGroupOut_Demo.ipynb
+│   ├── dataload.py               # 数据集加载与站点留组划分（核心）
+│   ├── main.py
+│   └── model.py
+
+├── model/                        # 公共模型核心代码
+│   ├── brainmsgpassing.py
+│   ├── base_model.py
+│   └── metrics.py
+
+└── README.md                    # 仓库说明文档
+```
+
+---
+
+# 配套英文说明（模型权重 百度网盘）
+## 📦 Model Checkpoints (Baidu Netdisk)
+All pre-trained model weights (`ckpt_demo/`) are **not uploaded to GitHub** due to large file sizes. They can be downloaded from:
+
+**Link：MF-HGNN_Model_Checkpoints**
+https://pan.baidu.com/s/1qII63kUEUc2tQDKOi-JwnQ
+**Extract Code：t7t9**
+
+After downloading, place the `ckpt_demo/` folder into the **corresponding experimental directory** to run the Jupyter demo.
+
+---
+
+## 📌 Key Files Introduction
+- **`dataload.py`** (in each folder): Responsible for **dataset loading and data partitioning** (including 10-fold, leave-group-out, and site-level leave-group-out cross-validation).
+- **`run.log` / `test.log`**: Complete training and testing records.
+- **`*_Demo.ipynb`**: One-click reproduction demo for all experimental results.
