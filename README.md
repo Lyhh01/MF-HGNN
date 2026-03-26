@@ -96,17 +96,25 @@ After downloading, place the `ckpt_demo/` folder into the **corresponding experi
 - **`run.log` / `test.log`**: Complete training and testing records.
 - **`*_Demo.ipynb`**: One-click reproduction demo for all experimental results.
 
-Dataset Partitioning Descriptions
-1. ABIDE — Standard 10-Fold Cross-Validation
-This folder implements a standard 10-fold stratified cross-validation at the individual level for the ABIDE dataset. We use StratifiedKFold(n_splits=10, shuffle=True, random_state=666) with stratification based on the diagnostic label (DX_GROUP: ASD vs. HC). In each fold, 90% of subjects are used for training and 10% for testing, maintaining consistent class distribution across all folds.
-2. ABIDE_LeaveGroupOut — Leave-Group-Out Cross-Validation Stratified by Site and Diagnosis
-This folder performs 10-fold leave-group-out cross-validation stratified by both imaging site and diagnostic status (DX_GROUP + SITE_ID). Stratification is applied to the joint distribution of diagnosis and site to ensure balanced group composition, reducing potential data leakage and providing a more rigorous evaluation of generalization.
-3. ABIDE_SiteLeaveGroupOut — Site-Specific Leave-One-Site-Out Cross-Validation
-This folder implements a strict leave-one-site-out cross-validation for the ABIDE dataset. Similar sites (e.g., UM_1/UM_2, UCLA_1/UCLA_2) are merged into unified sites. In each fold, all samples from one major site (NYU, UM, UCLA) are used as the test set, while samples from all remaining sites are used for training, explicitly evaluating cross-site generalization performance.
-4. MDD — Standard 10-Fold Cross-Validation (Individual-Level)
-This folder conducts standard 10-fold stratified cross-validation for the MDD dataset at the individual level. Stratification is based on the diagnostic label (DX_GROUP: MDD vs. HC), ensuring consistent class distribution in each fold to support reliable and stable performance evaluation.
-5. MDD_LeaveGroupOut — Leave-Group-Out Cross-Validation Stratified by Site and Diagnosis
-This folder performs 10-fold leave-group-out cross-validation for the MDD dataset, with stratification based on the joint distribution of diagnostic status and imaging site (DX_GROUP + SITE_ID). This strategy ensures balanced composition across folds and supports rigorous generalization evaluation.
-6. MDD_SiteLeaveGroupOut — Site-Specific Leave-One-Site-Out Cross-Validation
-This folder implements leave-one-site-out cross-validation for the MDD dataset. In each fold, all samples from one entire site are used as the test set, while all other sites are used for training. This setting evaluates the model’s ability to generalize to unseen imaging centers, representing the most stringent cross-site validation protocol.
+---
+
+## Dataset Partitioning Descriptions
+
+### 1. ABIDE — Standard 10-Fold Cross-Validation
+Standard 10-fold stratified cross-validation at the individual level. Uses `StratifiedKFold` with stratification by diagnostic label (DX_GROUP: ASD vs. HC). Each fold uses 90% for training and 10% for testing.
+
+### 2. ABIDE_LeaveGroupOut — Leave-Group-Out Cross-Validation Stratified by Site and Diagnosis
+10-fold leave-group-out cross-validation stratified by the joint distribution of diagnosis and site (DX_GROUP + SITE_ID). Ensures balanced group composition to reduce data leakage and enable rigorous generalization evaluation.
+
+### 3. ABIDE_SiteLeaveGroupOut — Site-Specific Leave-One-Site-Out Cross-Validation
+Strict leave-one-site-out cross-validation. Similar sites (e.g., UM_1/UM_2) are merged. Each fold tests on one major site (NYU, UM, UCLA) and trains on all remaining sites, evaluating cross-site generalization.
+
+### 4. MDD — Standard 10-Fold Cross-Validation (Individual-Level)
+Standard 10-fold stratified cross-validation at the individual level. Stratification by diagnostic label (DX_GROUP: MDD vs. HC) ensures consistent class distribution across folds.
+
+### 5. MDD_LeaveGroupOut — Leave-Group-Out Cross-Validation Stratified by Site and Diagnosis
+10-fold leave-group-out cross-validation stratified by diagnosis and site (DX_GROUP + SITE_ID). Maintains balanced fold composition for robust generalization assessment.
+
+### 6. MDD_SiteLeaveGroupOut — Site-Specific Leave-One-Site-Out Cross-Validation
+Leave-one-site-out cross-validation. Each fold tests on one entire site and trains on all others, representing the most stringent cross-site generalization protocol.
 
