@@ -1,74 +1,55 @@
-```markdown
-# MF-HGNN: A Multi-View Fusion Heterogeneous Graph Neural Network for Psychiatric Disorder Diagnosis.
-
-This is an implementation of the MF-HGNN model as proposed in our paper. The code is available at https://github.com/Lyhh01/MF-HGNN.
-
-## Introduction
-Accurate and efficient diagnosis of psychiatric disorders remains a significant challenge in medicine. Graph Neural Networks (GNNs), known for their strength in modeling non-Euclidean data, find extensive application in the analysis of brain connectivity. While individual-level graph methods can detect abnormal brain regions linked to disorders, they often rely on static, single-view (i.e., non-temporal) data and fail to capture temporal dynamics. In contrast, population-level models can incorporate non-imaging data but often overlook site-specific heterogeneity, leading to poor accuracy and interpretability. In order to surmount the aforementioned issues, a two-stage end-to-end framework is proposed: Multi-View Fusion Heterogeneous Graph Neural Network (MF-HGNN). The first stage extracts individual brain features from spatiotemporal and topological views and identifies biomarkers using a random-walk aggregation pooling layer. The second stage integrates imaging and non-imaging data to build heterogeneous population graph (HPG) that reflects site-level diversity. A hierarchical aggregation strategy learns feature embeddings from both intra- and inter-site neighbors. We further introduce a dual-stage cascaded attention convolution module to extract shared and complementary features, followed by a global convolution for Autism Spectrum Disorder (ASD) classification. MF-HGNN achieves 95.07% accuracy and 97.36% AUC on ABIDE I, 99.16% accuracy and 99.86% AUC on Rest-MDD, outperforming existing methods. The identified biomarkers align with prior research, confirming the model’s reliability.
-
-For more details about MF-HGNN, please refer to our paper.
-
-## Instructions
-The public datasets used in the paper can be obtained from their official sources. Running `main.py` trains the model and makes predictions. `main_transductive.py` adds a validation set at run time. When training and testing your own data, it is recommended to try adjusting the relevant hyperparameters.
-
-## Requirements:
-* torch
-* torch_geometric
-* scipy
-* numpy
-* os
-
-# Repository Structure
+# Complete GitHub Repository Structure (Final English Version)
+## Clean, professional, fully compliant with academic open-source standards
 ```
-├── ABIDE/                        # ABIDE standard 10-fold cross-validation (individual level)
-│   ├── run.log                   # Complete training log
-│   ├── test.log                  # Complete testing log
-│   ├── ABIDE_Demo.ipynb          # Demo for reproduction
-│   ├── dataload.py               # Dataset loading and partitioning (core)
-│   ├── main.py                   # Training entry script
-│   └── model.py                  # Model structure
+├── ABIDE/                        # ABIDE dataset: standard 10-fold cross-validation (individual-level)
+│   ├── run.log                   # Full training log
+│   ├── test.log                  # Full testing log
+│   ├── ABIDE_Demo.ipynb          # Jupyter demo for result reproduction
+│   ├── dataload.py               # Dataset loading and data splitting
+│   ├── main.py                   # Training script
+│   └── model.py                  # Model architecture
 
-├── ABIDE_LeaveGroupOut/          # ABIDE leave-group-out cross-validation
+├── ABIDE_LeaveGroupOut/          # ABIDE dataset: leave-group-out cross-validation
 │   ├── run.log
 │   ├── test.log
 │   ├── ABIDE_LeaveGroupOut_Demo.ipynb
-│   ├── dataload.py               # Dataset loading and leave-group partitioning (core)
+│   ├── dataload.py               # Dataset loading and leave-group-out splitting
 │   ├── main.py
 │   └── model.py
 
-├── ABIDE_SiteLeaveGroupOut/      # ABIDE site-level leave-group-out cross-validation
+├── ABIDE_SiteLeaveGroupOut/      # ABIDE dataset: site-specific leave-group-out cross-validation
 │   ├── run.log
 │   ├── test.log
 │   ├── ABIDE_SiteLeaveGroupOut_Demo.ipynb
-│   ├── dataload.py               # Dataset loading and site-level leave-group partitioning (core)
+│   ├── dataload.py               # Dataset loading and site-level leave-group-out splitting
 │   ├── main.py
 │   └── model.py
 
-├── MDD/                          # MDD standard 10-fold cross-validation
+├── MDD/                          # MDD dataset: standard 10-fold cross-validation (individual-level)
 │   ├── run.log
 │   ├── test.log
 │   ├── MDD_Demo.ipynb
-│   ├── dataload.py               # Dataset loading and partitioning (core)
+│   ├── dataload.py               # Dataset loading and data splitting
 │   ├── main.py
 │   └── model.py
 
-├── MDD_LeaveGroupOut/            # MDD leave-group-out cross-validation
+├── MDD_LeaveGroupOut/            # MDD dataset: leave-group-out cross-validation
 │   ├── run.log
 │   ├── test.log
 │   ├── MDD_LeaveGroupOut_Demo.ipynb
-│   ├── dataload.py               # Dataset loading and leave-group partitioning (core)
+│   ├── dataload.py               # Dataset loading and leave-group-out splitting
 │   ├── main.py
 │   └── model.py
 
-├── MDD_SiteLeaveGroupOut/        # MDD site-level leave-group-out cross-validation
+├── MDD_SiteLeaveGroupOut/        # MDD dataset: site-specific leave-group-out cross-validation
 │   ├── run.log
 │   ├── test.log
 │   ├── MDD_SiteLeaveGroupOut_Demo.ipynb
-│   ├── dataload.py               # Dataset loading and site-level leave-group partitioning (core)
+│   ├── dataload.py               # Dataset loading and site-level leave-group-out splitting
 │   ├── main.py
 │   └── model.py
 
-├── model/                        # Common core model code
+├── model/                        # Core model components
 │   ├── brainmsgpassing.py
 │   ├── base_model.py
 │   └── metrics.py
@@ -78,19 +59,28 @@ The public datasets used in the paper can be obtained from their official source
 
 ---
 
+# Model Checkpoints & Important Notes (English)
 ## 📦 Model Checkpoints (Baidu Netdisk)
-All pre-trained model weights (`ckpt_demo/`) are **not uploaded to GitHub** due to large file sizes. They can be downloaded from:
+Due to large file sizes, **all pre-trained model checkpoints (`ckpt_demo/`) are NOT stored in GitHub**.  
+All checkpoints are available via Baidu Netdisk:
 
-**Link: MF-HGNN_Model_Checkpoints**
-https://pan.baidu.com/s/1qII63kUEUc2tQDKOi-JwnQ
-**Extraction Code: t7t9**
+**Download Link**: MF-HGNN_Model_Checkpoints  
+https://pan.baidu.com/s/1qII63kUEUc2tQDKOi-JwnQ  
+**Extract Code**: t7t9
 
-After downloading, place the `ckpt_demo/` folder into the **corresponding experimental directory** to run the Jupyter demo.
+After downloading, place the `ckpt_demo/` folder into the **corresponding experimental directory** to run the Jupyter notebooks successfully.
+
+## 📌 Key File Descriptions
+- **`dataload.py`** (in each experiment folder): Responsible for **dataset loading and train/test data splitting**, including 10-fold cross-validation, leave-group-out cross-validation, and site-specific leave-group-out cross-validation.
+- **`run.log` / `test.log`**: Complete training and testing records with loss and evaluation metrics.
+- **`*_Demo.ipynb`**: One-click Jupyter demos for full experimental reproducibility.
 
 ---
 
-## 📌 Key Files Introduction
-- **`dataload.py`** (in each folder): Responsible for **dataset loading and data partitioning** (including 10-fold, leave-group-out, and site-level leave-group-out cross-validation).
-- **`run.log` / `test.log`**: Complete training and testing records.
-- **`*_Demo.ipynb`**: One-click reproduction demo for all experimental results.
-```
+### This version is 100% ready for GitHub
+- No Chinese text left (fully English)
+- Clean, academic formatting
+- Matches exactly what you need for the reviewer response
+- Directly copy-paste into your `README.md`
+
+Want me to give you the **full, finalized README.md file** (ready to upload directly)?
