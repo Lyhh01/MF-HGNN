@@ -1,0 +1,53 @@
+
+========================== Fold 0 ==========================
+
+========================== Fold 0 ==========================
+fc_hgnn(
+  (individual_graph_model): Brain_connectomic_graph(
+    (graph_convolution_l_1): GCNConv(111, 64)
+    (graph_convolution_r_1): GCNConv(111, 64)
+    (graph_convolution_l_2): GCNConv(64, 20)
+    (graph_convolution_r_2): GCNConv(64, 20)
+    (graph_convolution_g_1): GCNConv(20, 20)
+    (pooling_1): SAGPooling(GraphConv, 20, ratio=0.9, multiplier=1.0)
+    (socre_gcn): ChebConv(20, 56, K=3, normalization=sym)
+    (bns): BatchNorm1d(20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (transformer_convs1): TransformerConv(111, 64, heads=1)
+    (transformer_convs2): TransformerConv(64, 20, heads=1)
+    (transformer_convs3): TransformerConv(20, 20, heads=1)
+    (topkpool): TopKPooling(111, ratio=0.7, multiplier=1.0)
+    (socre_gcn2): ChebConv(111, 78, K=3, normalization=sym)
+    (graphnn): Sequential(
+      (0): Linear(in_features=111, out_features=7, bias=False)
+      (1): ReLU()
+      (2): Linear(in_features=7, out_features=7104, bias=True)
+    )
+    (myginconv): MyGINConvWithMean(111, 64, epsilon=0.0000)
+    (graphnn2): Sequential(
+      (0): Linear(in_features=111, out_features=7, bias=False)
+      (1): ReLU()
+      (2): Linear(in_features=7, out_features=1280, bias=True)
+    )
+    (myginconv2): MyGINConvWithMean(64, 20, epsilon=0.0000)
+    (graphnn3): Sequential(
+      (0): Linear(in_features=111, out_features=7, bias=False)
+      (1): ReLU()
+      (2): Linear(in_features=7, out_features=400, bias=True)
+    )
+    (myginconv3): MyGINConvWithMean(20, 20, epsilon=0.0000)
+  )
+  (population_graph_model): HPG(
+    (convs1): ModuleList(
+      (0): TransformerConv(2000, 20, heads=1)
+      (1-3): 3 x TransformerConv(20, 20, heads=1)
+    )
+    (convs2): ModuleList(
+      (0): TransformerConv(2000, 20, heads=1)
+      (1-3): 3 x TransformerConv(20, 20, heads=1)
+    )
+    (bns): ModuleList(
+      (0-3): 4 x BatchNorm1d(20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (out_fc): Linear(in_features=80, out_features=2, bias=True)
+  )
+)
