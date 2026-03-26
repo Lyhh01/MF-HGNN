@@ -92,7 +92,7 @@ After downloading, place the `ckpt_demo/` folder into the **corresponding experi
 ---
 
 ## 📌 Key Files Introduction
-- **`dataload.py`** (in each folder): Responsible for **dataset loading and data partitioning** (including 10-fold, leave-group-out, and site-level leave-group-out cross-validation).
+- **`dataload.py`** (in each folder): Responsible for **dataset loading and data partitioning** (including 10-fold, stratified leave-group-out by site and diagnosis, and site-level leave-group-out cross-validation).
 - **`run.log` / `test.log`**: Complete training and testing records.
 - **`*_Demo.ipynb`**: One-click reproduction demo for all experimental results.
 
