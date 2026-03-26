@@ -78,7 +78,6 @@ The public datasets used in the paper can be obtained from their official source
 
 ---
 
-# 配套英文说明（模型权重 百度网盘）
 ## 📦 Model Checkpoints (Baidu Netdisk)
 All pre-trained model weights (`ckpt_demo/`) are **not uploaded to GitHub** due to large file sizes. They can be downloaded from:
 
