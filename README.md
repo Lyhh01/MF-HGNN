@@ -101,13 +101,13 @@ After downloading, place the `ckpt_demo/` folder into the **corresponding experi
 ## Dataset Partitioning Descriptions
 
 ### 1. ABIDE — Standard 10-Fold Cross-Validation
-Standard 10-fold stratified cross-validation at the individual level. Uses `StratifiedKFold` with stratification by diagnostic label (DX_GROUP: ASD vs. HC). Each fold uses 90% for training and 10% for testing.
+Standard 10-fold stratified cross-validation at the individual level. Uses `StratifiedKFold` with stratification by diagnostic label (DX_GROUP: ASD vs. HC).
 
 ### 2. ABIDE_LeaveGroupOut — Leave-Group-Out Cross-Validation Stratified by Site and Diagnosis
 10-fold leave-group-out cross-validation stratified by the joint distribution of diagnosis and site (DX_GROUP + SITE_ID). Ensures balanced group composition to reduce data leakage and enable rigorous generalization evaluation.
 
 ### 3. ABIDE_SiteLeaveGroupOut — Site-Specific Leave-One-Site-Out Cross-Validation
-Strict leave-one-site-out cross-validation. Similar sites (e.g., UM_1/UM_2) are merged. Each fold tests on one major site (NYU, UM, UCLA) and trains on all remaining sites, evaluating cross-site generalization.
+Strict leave-one-out (site) cross-validation, designed as a more rigorous strategy to evaluate model generalization across different imaging centers. This validation was conducted on the three largest sites.
 
 ### 4. MDD — Standard 10-Fold Cross-Validation (Individual-Level)
 Standard 10-fold stratified cross-validation at the individual level. Stratification by diagnostic label (DX_GROUP: MDD vs. HC) ensures consistent class distribution across folds.
@@ -116,5 +116,5 @@ Standard 10-fold stratified cross-validation at the individual level. Stratifica
 10-fold leave-group-out cross-validation stratified by diagnosis and site (DX_GROUP + SITE_ID). Maintains balanced fold composition for robust generalization assessment.
 
 ### 6. MDD_SiteLeaveGroupOut — Site-Specific Leave-One-Site-Out Cross-Validation
-Leave-one-site-out cross-validation. Each fold tests on one entire site and trains on all others, representing the most stringent cross-site generalization protocol.
+Leave-one-out (site) cross-validation, designed as a more rigorous strategy to evaluate model generalization across different imaging centers. Each fold tests on one entire site and trains on all others, representing the most stringent cross-site generalization protocol.
 
