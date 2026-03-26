@@ -20,7 +20,7 @@ The public datasets used in the paper can be obtained from their official source
 
 # Repository Structure
 ```
-├── ABIDE/                        # ABIDE dataset: standard 10-fold cross-validation (individual-level)
+├── ABIDE/                        # ABIDE dataset: standard 10-fold cross-validation
 │   ├── run.log                   # Full training log
 │   ├── test.log                  # Full testing log
 │   ├── ABIDE_Demo.ipynb          # Jupyter demo for result reproduction
@@ -28,11 +28,11 @@ The public datasets used in the paper can be obtained from their official source
 │   ├── main.py                   # Training script
 │   └── model.py                  # Model architecture
 
-├── ABIDE_LeaveGroupOut/          # ABIDE dataset: leave-group-out cross-validation
+├── ABIDE_LeaveGroupOut/          # ABIDE dataset: leave-group-out cross-validation stratified by site and diagnostic status
 │   ├── run.log
 │   ├── test.log
 │   ├── ABIDE_LeaveGroupOut_Demo.ipynb
-│   ├── dataload.py               # Dataset loading and leave-group-out splitting
+│   ├── dataload.py               
 │   ├── main.py
 │   └── model.py
 
@@ -40,7 +40,7 @@ The public datasets used in the paper can be obtained from their official source
 │   ├── run.log
 │   ├── test.log
 │   ├── ABIDE_SiteLeaveGroupOut_Demo.ipynb
-│   ├── dataload.py               # Dataset loading and site-level leave-group-out splitting
+│   ├── dataload.py               
 │   ├── main.py
 │   └── model.py
 
@@ -48,15 +48,15 @@ The public datasets used in the paper can be obtained from their official source
 │   ├── run.log
 │   ├── test.log
 │   ├── MDD_Demo.ipynb
-│   ├── dataload.py               # Dataset loading and data splitting
+│   ├── dataload.py               
 │   ├── main.py
 │   └── model.py
 
-├── MDD_LeaveGroupOut/            # MDD dataset: leave-group-out cross-validation
+├── MDD_LeaveGroupOut/            # MDD dataset: leave-group-out cross-validation stratified by site and diagnostic status
 │   ├── run.log
 │   ├── test.log
 │   ├── MDD_LeaveGroupOut_Demo.ipynb
-│   ├── dataload.py               # Dataset loading and leave-group-out splitting
+│   ├── dataload.py               
 │   ├── main.py
 │   └── model.py
 
@@ -64,9 +64,11 @@ The public datasets used in the paper can be obtained from their official source
 │   ├── run.log
 │   ├── test.log
 │   ├── MDD_SiteLeaveGroupOut_Demo.ipynb
-│   ├── dataload.py               # Dataset loading and site-level leave-group-out splitting
+│   ├── dataload.py               
 │   ├── main.py
 │   └── model.py
+
+├── MF-HGNN/        # Best Model
 
 ├── model/                        # Core model components
 │   ├── brainmsgpassing.py
