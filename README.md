@@ -78,7 +78,7 @@ The public datasets used in the paper can be obtained from their official source
 ```
 
 ## 📦 Model Checkpoints
-All pre-trained model weights (`ckpt_demo/`) are **not uploaded to GitHub** due to large file sizes. They can be downloaded from:
+All optimal model weights (`ckpt_demo/`) are **not uploaded to GitHub** due to large file sizes. They can be downloaded from:
 
 **Link：MF-HGNN_Model_Checkpoints**
 https://pan.baidu.com/s/1qII63kUEUc2tQDKOi-JwnQ
